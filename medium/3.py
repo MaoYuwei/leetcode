@@ -34,24 +34,35 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
+        import operator
         if len(s) <= 0:
             return 0
         wordpos = {}
-        ret = 0
-        left = 0
         for i in range(len(s)):
-            if s[i] in wordpos.keys() and left <= wordpos[s[i]]:
-                left = wordpos[s[i]] + 1
+            j = 0
+            while i + j < len(s):
+                if s[j] != s[i]:
+                    break
+                j += 1
+
+            if s[i] in wordpos.keys():
+                if j+1 > wordpos[s[i]]:
+                    wordpos[s[i]] = j+1
             else:
-                result = i - left + 1
-                if result > ret:
-                    ret = result
-            wordpos[s[i]] = i
-        return ret
+                wordpos[s[i]] = j + 1
+
+        wl = zip(wordpos.keys(), wordpos.values())
+        wl = sorted(wl, key=operator.itemgetter(0))
+        wl = sorted(wl, key=operator.itemgetter(0))
+        print wl
+        return ''.join([wl[0][0]]*wl[0][1])
 
 if __name__ == '__main__':
+    import sys
     solution = Solution()
-    s = 'abcabcbb'
-    # s = 'qwnfenpglqdq'
-    r = solution.lengthOfLongestSubstring(s)
-    print r
+    # s = 'abcabcbb'
+    # # s = 'qwnfenpglqdq'
+    # r = solution.lengthOfLongestSubstring(s)
+    # print r
+    s = sys.stdin.readline().strip()
+    solution.lengthOfLongestSubstring(s)
